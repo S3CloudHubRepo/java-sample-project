@@ -25,6 +25,9 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
+      - name: List target directory contents
+        run: ls -al ${GITHUB_WORKSPACE}/target  # Verify that the WAR file is generated
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -38,7 +41,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -59,5 +62,4 @@ jobs:
         with:
           app-name: 'my-hello-world'
           slot-name: 'Production'
-          package: '*.war'
-          
+          package: '*.war'  # Ensure this matches the WAR file downloaded
